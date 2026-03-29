@@ -148,6 +148,23 @@ function npVypocti() {
   if (ozp > celkem) { err.textContent = '\u26a0 Po\u010det OZP nem\u016f\u017ee p\u0159ekro\u010dit celkov\u00fd po\u010det zam\u011bstnanc\u016f.'; err.style.display = 'block'; return; }
   err.style.display = 'none';
 
+  if (celkem < 25) {
+    var note = document.getElementById('np-note');
+    note.style.background = '#e9f7ef';
+    note.style.border = '1px solid #a9dfbf';
+    note.innerHTML = '<strong style="color:#1e8449;">\u2713 Povinnost se na v\u00e1s nevztahuje.</strong> Zam\u011bstnavatel\u00e9 s pr\u016fm\u011brn\u00fdm p\u0159epo\u010dten\u00fdm po\u010dtem zam\u011bstnanc\u016f <strong>ni\u017e\u0161\u00edm ne\u017e 25</strong> nemaj\u00ed podle \u00a7\u00a081 z\u00e1kona \u010d.\u00a0435/2004\u00a0Sb. povinnost zam\u011bstn\u00e1vat OZP, platit n\u00e1hradn\u00ed pln\u011bn\u00ed ani odv\u00e1d\u011bt odvod do st\u00e1tn\u00edho rozpo\u010dtu.';
+    document.getElementById('np-tbody').innerHTML = '';
+    document.getElementById('np-val-povinnost').textContent = '\u2014';
+    document.getElementById('np-val-splneno').textContent = '\u2014';
+    document.getElementById('np-val-zbytek').textContent = '\u2014';
+    document.getElementById('np-val-splneno').style.color = '#1a1a1a';
+    document.getElementById('np-val-zbytek').style.color = '#1a1a1a';
+    document.getElementById('np-val-zbytek').style.fontSize = '1.4rem';
+    document.getElementById('np-results').style.display = 'block';
+    document.getElementById('np-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    return;
+  }
+
   var povinny     = celkem * 0.04;
   var hodnotaOzp  = mzda * 7;
   var ozpNahradni = nahradni / hodnotaOzp;
