@@ -1,233 +1,229 @@
-<!DOCTYPE html>
-<html lang="cs">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Kalkulačka náhradního plnění</title>
-<style>
-  .np-container {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 1rem;
-  }
-  .np-form-grid {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 1rem 2rem;
-  }
-  @media (max-width: 520px) {
-    .np-form-grid { grid-template-columns: 1fr; }
-  }
-  .np-form-group {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-  }
-  .np-summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 0;
-    border: 1px solid;
-    margin: 1rem 0;
-    text-align: center;
-  }
-  @media (max-width: 520px) {
-    .np-summary-grid { grid-template-columns: 1fr; }
-  }
-  .np-summary-cell {
-    padding: 0.8rem;
-    border-right: 1px solid;
-  }
-  .np-summary-cell:last-child { border-right: none; }
-  .np-result-table {
-    width: 100%;
-    border-collapse: collapse;
-  }
-  .np-result-table th,
-  .np-result-table td {
-    padding: 0.5rem;
-    border-bottom: 1px solid;
-    text-align: left;
-  }
-  .np-result-table td:last-child,
-  .np-result-table th:last-child {
-    text-align: right;
-  }
-  .np-results { display: none; }
-  .np-results.visible { display: block; }
-  .np-error { display: none; }
-  .np-btn-row { margin-top: 1rem; display: flex; gap: 0.5rem; flex-wrap: wrap; }
-  input[type="number"] { width: 100%; }
-</style>
-</head>
-<body>
+<!-- KALKULAČKA NÁHRADNÍHO PLNĚNÍ — vložte celý tento blok do HTML editoru -->
 
-<div class="np-container">
+<div id="np-wrap" style="max-width:780px;margin:0 auto;padding:1.5rem 1rem;font-family:Arial,Helvetica,sans-serif;font-size:15px;line-height:1.6;color:#1a1a1a;box-sizing:border-box;">
 
-  <h2>Kalkulačka náhradního plnění</h2>
-  <p><small>§ 81 zákona č. 435/2004 Sb., o zaměstnanosti</small></p>
-
-  <p>Zaměstnavatelé s průměrným ročním přepočteným počtem <strong>25 a více zaměstnanců</strong> jsou povinni zaměstnávat OZP ve výši <strong>4 % podílu</strong>. Povinnost lze plnit přímým zaměstnáváním, náhradním plněním (odběrem od firem zaměstnávajících OZP), odvodem do státního rozpočtu, nebo kombinací těchto způsobů.</p>
-
-  <h3>Vstupní údaje</h3>
-
-  <div class="np-form-grid">
-
-    <div class="np-form-group">
-      <label for="celkemZam"><strong>Průměrný roční přepočtený počet zaměstnanců</strong></label>
-      <input type="number" id="celkemZam" min="0" step="0.01" placeholder="např. 120">
-      <small>Přepočteno na plné úvazky za celý rok</small>
-    </div>
-
-    <div class="np-form-group">
-      <label for="ozpPrimo"><strong>Z toho přepočtený počet zaměstnaných OZP</strong> <small>(přímo u vás)</small></label>
-      <input type="number" id="ozpPrimo" min="0" step="0.01" placeholder="např. 2">
-      <small>Osoby se zdravotním postižením (§ 67 ZoZ)</small>
-    </div>
-
-    <div class="np-form-group">
-      <label for="prumMzda"><strong>Průměrná mzda v národním hospodářství</strong> <small>(Kč/čtvrtletí)</small></label>
-      <input type="number" id="prumMzda" min="0" step="1" value="46557">
-      <small>Vyhlašuje MPSV — aktuálně 46 557 Kč (3Q 2024)</small>
-    </div>
-
-    <div class="np-form-group">
-      <label for="nahradniPlneni"><strong>Hodnota náhradního plnění</strong> <small>(Kč bez DPH)</small></label>
-      <input type="number" id="nahradniPlneni" min="0" step="1" placeholder="např. 150000">
-      <small>Odběr zboží/služeb od dodavatele s OZP za rok</small>
-    </div>
-
+  <div style="background:#f0f4ff;border-left:4px solid #2c5dcd;padding:1rem 1.2rem;margin-bottom:1.5rem;border-radius:0 6px 6px 0;">
+    <p style="margin:0 0 0.4rem 0;"><strong>§ 81 zákona č. 435/2004 Sb., o zaměstnanosti</strong></p>
+    <p style="margin:0;">Zaměstnavatelé s průměrným ročním přepočteným počtem <strong>25 a více zaměstnanců</strong> jsou povinni zaměstnávat OZP ve výši <strong>4 % podílu</strong>. Povinnost lze plnit přímým zaměstnáváním, náhradním plněním (odběrem od firem zaměstnávajících OZP), odvodem do státního rozpočtu, nebo kombinací těchto způsobů.</p>
   </div>
 
-  <p class="np-error" id="errorMsg"></p>
+  <div style="background:#f8f8f8;border:1px solid #ddd;border-radius:6px;padding:1rem 1.2rem;margin-bottom:1.5rem;">
+    <p style="margin:0 0 0.5rem 0;"><strong>§ 82 — Výše odvodu do státního rozpočtu</strong></p>
+    <p style="margin:0 0 0.5rem 0;">Odvod za každou nesplněnou OZP = průměrná mzda v NH × koeficient:</p>
+    <table style="width:100%;border-collapse:collapse;font-size:14px;">
+      <tr>
+        <td style="padding:0.3rem 0.6rem;border:1px solid #ddd;background:#fff;"><strong>Koeficient 1</strong></td>
+        <td style="padding:0.3rem 0.6rem;border:1px solid #ddd;background:#fff;">přímý podíl OZP ≥ 3 %</td>
+      </tr>
+      <tr>
+        <td style="padding:0.3rem 0.6rem;border:1px solid #ddd;background:#fff;"><strong>Koeficient 2</strong></td>
+        <td style="padding:0.3rem 0.6rem;border:1px solid #ddd;background:#fff;">přímý podíl OZP ≥ 1 % a &lt; 3 %</td>
+      </tr>
+      <tr>
+        <td style="padding:0.3rem 0.6rem;border:1px solid #ddd;background:#fff;"><strong>Koeficient 3,5</strong></td>
+        <td style="padding:0.3rem 0.6rem;border:1px solid #ddd;background:#fff;">přímý podíl OZP &lt; 1 %</td>
+      </tr>
+    </table>
+  </div>
 
-  <div class="np-btn-row">
-    <button onclick="vypocti()">Vypočítat</button>
-    <button onclick="resetForm()">Vymazat</button>
+  <!-- FORMULÁŘ -->
+  <div style="background:#fff;border:1px solid #ddd;border-radius:8px;padding:1.5rem;margin-bottom:1rem;">
+    <p style="margin:0 0 1rem 0;font-weight:700;font-size:16px;">Vstupní údaje</p>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem 2rem;">
+
+      <div style="display:flex;flex-direction:column;gap:0.3rem;">
+        <label for="np-celkem" style="font-weight:700;font-size:14px;">Průměrný přepočtený počet zaměstnanců</label>
+        <input type="number" id="np-celkem" min="0" step="0.01" placeholder="např. 120"
+          style="font-size:15px;padding:0.5rem 0.6rem;border:1px solid #bbb;border-radius:4px;width:100%;box-sizing:border-box;">
+        <span style="font-size:12px;color:#666;">Přepočteno na plné úvazky za celý rok</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0.3rem;">
+        <label for="np-ozp" style="font-weight:700;font-size:14px;">Z toho přímo zaměstnaných OZP</label>
+        <input type="number" id="np-ozp" min="0" step="0.01" placeholder="např. 2"
+          style="font-size:15px;padding:0.5rem 0.6rem;border:1px solid #bbb;border-radius:4px;width:100%;box-sizing:border-box;">
+        <span style="font-size:12px;color:#666;">Osoby se zdravotním postižením (§ 67 ZoZ)</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0.3rem;">
+        <label for="np-mzda" style="font-weight:700;font-size:14px;">Průměrná mzda v NH (Kč/čtvrtletí)</label>
+        <input type="number" id="np-mzda" min="0" step="1" value="46557"
+          style="font-size:15px;padding:0.5rem 0.6rem;border:1px solid #bbb;border-radius:4px;width:100%;box-sizing:border-box;">
+        <span style="font-size:12px;color:#666;">Vyhlašuje MPSV — aktuálně 46 557 Kč (3Q 2024)</span>
+      </div>
+
+      <div style="display:flex;flex-direction:column;gap:0.3rem;">
+        <label for="np-nahradni" style="font-weight:700;font-size:14px;">Hodnota náhradního plnění (Kč bez DPH)</label>
+        <input type="number" id="np-nahradni" min="0" step="1" placeholder="např. 150000"
+          style="font-size:15px;padding:0.5rem 0.6rem;border:1px solid #bbb;border-radius:4px;width:100%;box-sizing:border-box;">
+        <span style="font-size:12px;color:#666;">Odběr zboží/služeb od dodavatele s OZP za rok</span>
+      </div>
+
+    </div>
+
+    <p id="np-error" style="display:none;color:#c0392b;font-size:14px;margin:0.8rem 0 0 0;"></p>
+
+    <div style="margin-top:1.2rem;display:flex;gap:0.6rem;flex-wrap:wrap;">
+      <button onclick="npVypocti()"
+        style="background:#2c5dcd;color:#fff;border:none;border-radius:4px;padding:0.6rem 1.4rem;font-size:14px;font-weight:700;cursor:pointer;letter-spacing:0.03em;">
+        Vypočítat
+      </button>
+      <button onclick="npReset()"
+        style="background:#fff;color:#333;border:1px solid #bbb;border-radius:4px;padding:0.6rem 1.2rem;font-size:14px;cursor:pointer;">
+        Vymazat
+      </button>
+    </div>
   </div>
 
   <!-- VÝSLEDKY -->
-  <div class="np-results" id="results">
+  <div id="np-results" style="display:none;">
 
-    <h3>Výsledky výpočtu</h3>
-
-    <div class="np-summary-grid">
-      <div class="np-summary-cell">
-        <div><small>Povinný počet OZP</small></div>
-        <div><strong id="valPovinnost">—</strong></div>
+    <!-- Souhrnné buňky -->
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-bottom:1rem;text-align:center;">
+      <div style="padding:1rem;border-right:1px solid #ddd;background:#fff;">
+        <div style="font-size:12px;color:#666;margin-bottom:0.3rem;">Povinný počet OZP</div>
+        <div id="np-val-povinnost" style="font-size:1.4rem;font-weight:700;color:#1a1a1a;">—</div>
       </div>
-      <div class="np-summary-cell">
-        <div><small>Splněno přímým zaměstnáváním</small></div>
-        <div><strong id="valSplneno">—</strong></div>
+      <div style="padding:1rem;border-right:1px solid #ddd;background:#fff;">
+        <div style="font-size:12px;color:#666;margin-bottom:0.3rem;">Celkem splněno</div>
+        <div id="np-val-splneno" style="font-size:1.4rem;font-weight:700;">—</div>
       </div>
-      <div class="np-summary-cell">
-        <div><small>Zbývá pokrýt</small></div>
-        <div><strong id="valZbytek">—</strong></div>
+      <div style="padding:1rem;background:#fff;">
+        <div style="font-size:12px;color:#666;margin-bottom:0.3rem;">Zbývá pokrýt / odvod</div>
+        <div id="np-val-zbytek" style="font-size:1.4rem;font-weight:700;">—</div>
       </div>
     </div>
 
-    <table class="np-result-table">
-      <thead>
-        <tr>
-          <th>Položka</th>
-          <th>Hodnota</th>
-        </tr>
-      </thead>
-      <tbody id="tableBody"></tbody>
-    </table>
+    <!-- Detail tabulka -->
+    <div style="background:#fff;border:1px solid #ddd;border-radius:8px;overflow:hidden;margin-bottom:1rem;">
+      <table style="width:100%;border-collapse:collapse;font-size:14px;">
+        <thead>
+          <tr style="background:#f0f4ff;">
+            <th style="padding:0.6rem 0.8rem;text-align:left;font-weight:700;border-bottom:1px solid #ddd;">Položka</th>
+            <th style="padding:0.6rem 0.8rem;text-align:right;font-weight:700;border-bottom:1px solid #ddd;">Hodnota</th>
+          </tr>
+        </thead>
+        <tbody id="np-tbody"></tbody>
+      </table>
+    </div>
 
-    <div id="noteBox"></div>
+    <!-- Závěrečná zpráva -->
+    <div id="np-note" style="border-radius:6px;padding:1rem 1.2rem;font-size:14px;line-height:1.65;"></div>
 
   </div>
 
-  <hr>
-  <p><small>Kalkulačka je orientační. Výpočet vychází z § 81 zákona č. 435/2004 Sb., o zaměstnanosti, ve znění pozdějších předpisů. Pro závazné posouzení doporučujeme konzultaci s odborníkem nebo příslušným úřadem práce.</small></p>
+  <p style="font-size:12px;color:#999;margin-top:1.5rem;border-top:1px solid #eee;padding-top:0.8rem;">
+    Kalkulačka je orientační. Výpočet vychází z § 81 a § 82 zákona č. 435/2004 Sb., o zaměstnanosti, ve znění pozdějších předpisů. Pro závazné posouzení doporučujeme konzultaci s odborníkem nebo příslušným úřadem práce.
+  </p>
 
 </div>
 
 <script>
-function formatCzk(n) {
-  return n.toLocaleString('cs-CZ', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' Kč';
-}
-function formatNum(n, d) {
+function npFmt(n, d) {
   d = d !== undefined ? d : 2;
   return n.toLocaleString('cs-CZ', { minimumFractionDigits: d, maximumFractionDigits: d });
 }
-
-function resetForm() {
-  document.getElementById('celkemZam').value = '';
-  document.getElementById('ozpPrimo').value = '';
-  document.getElementById('nahradniPlneni').value = '';
-  document.getElementById('prumMzda').value = '46557';
-  document.getElementById('results').classList.remove('visible');
-  document.getElementById('errorMsg').style.display = 'none';
+function npCzk(n) {
+  return n.toLocaleString('cs-CZ', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + '\u00a0K\u010d';
 }
 
-function vypocti() {
-  var celkem = parseFloat(document.getElementById('celkemZam').value) || 0;
-  var ozpPrimo = parseFloat(document.getElementById('ozpPrimo').value) || 0;
-  var prumMzda = parseFloat(document.getElementById('prumMzda').value) || 46557;
-  var nahradni = parseFloat(document.getElementById('nahradniPlneni').value) || 0;
+function npReset() {
+  document.getElementById('np-celkem').value = '';
+  document.getElementById('np-ozp').value = '';
+  document.getElementById('np-nahradni').value = '';
+  document.getElementById('np-mzda').value = '46557';
+  document.getElementById('np-results').style.display = 'none';
+  document.getElementById('np-error').style.display = 'none';
+}
 
-  var errEl = document.getElementById('errorMsg');
+function npVypocti() {
+  var celkem   = parseFloat(document.getElementById('np-celkem').value)   || 0;
+  var ozp      = parseFloat(document.getElementById('np-ozp').value)      || 0;
+  var mzda     = parseFloat(document.getElementById('np-mzda').value)     || 46557;
+  var nahradni = parseFloat(document.getElementById('np-nahradni').value) || 0;
+  var err      = document.getElementById('np-error');
 
-  if (celkem <= 0) {
-    errEl.textContent = '⚠ Zadejte průměrný počet zaměstnanců.';
-    errEl.style.display = 'block';
-    return;
-  }
-  if (ozpPrimo > celkem) {
-    errEl.textContent = '⚠ Počet OZP nemůže překročit celkový počet zaměstnanců.';
-    errEl.style.display = 'block';
-    return;
-  }
-  errEl.style.display = 'none';
+  if (celkem <= 0) { err.textContent = '\u26a0 Zadejte pr\u016fm\u011brn\u00fd po\u010det zam\u011bstnanc\u016f.'; err.style.display = 'block'; return; }
+  if (ozp > celkem) { err.textContent = '\u26a0 Po\u010det OZP nem\u016f\u017ee p\u0159ekro\u010dit celkov\u00fd po\u010det zam\u011bstnanc\u016f.'; err.style.display = 'block'; return; }
+  err.style.display = 'none';
 
-  var povinnyPocetRaw = celkem * 0.04;
-  var hodnotaJedne = prumMzda * 7;
-  var ozpNahradni = nahradni / hodnotaJedne;
-  var splnenoCelkem = ozpPrimo + ozpNahradni;
-  var zbytek = Math.max(0, povinnyPocetRaw - splnenoCelkem);
-  var odvodJedne = prumMzda * 2.5;
-  var odvodCelkem = zbytek * odvodJedne;
+  var povinny     = celkem * 0.04;
+  var hodnotaOzp  = mzda * 7;
+  var ozpNahradni = nahradni / hodnotaOzp;
+  var splneno     = ozp + ozpNahradni;
+  var zbytek      = Math.max(0, povinny - splneno);
+  var podil       = celkem > 0 ? (ozp / celkem) * 100 : 0;
+
+  var koef, koefTxt;
+  if (podil >= 3)      { koef = 1;   koefTxt = '1 (p\u0159\u00edm\u00fd pod\u00edl OZP \u2265 3\u00a0%)'; }
+  else if (podil >= 1) { koef = 2;   koefTxt = '2 (p\u0159\u00edm\u00fd pod\u00edl OZP \u2265 1\u00a0% a < 3\u00a0%)'; }
+  else                 { koef = 3.5; koefTxt = '3,5 (p\u0159\u00edm\u00fd pod\u00edl OZP < 1\u00a0%)'; }
+
+  var odvodCelkem = zbytek * mzda * koef;
+  var splneno2    = Math.min(splneno, povinny);
+  var ok          = zbytek <= 0;
 
   // Summary
-  document.getElementById('valPovinnost').textContent = formatNum(povinnyPocetRaw) + ' osob';
-  document.getElementById('valSplneno').textContent = formatNum(Math.min(splnenoCelkem, povinnyPocetRaw)) + ' osob';
-  document.getElementById('valZbytek').textContent = formatNum(zbytek) + ' osob';
+  document.getElementById('np-val-povinnost').textContent = npFmt(povinny) + ' osob';
+  var elSplneno = document.getElementById('np-val-splneno');
+  elSplneno.textContent = npFmt(splneno2) + ' osob';
+  elSplneno.style.color = ok ? '#27ae60' : '#e67e22';
+  var elZbytek = document.getElementById('np-val-zbytek');
+  if (ok) {
+    elZbytek.textContent = 'Splaněno ✓';
+    elZbytek.style.color = '#27ae60';
+  } else {
+    elZbytek.textContent = npFmt(zbytek) + ' osob\n' + npCzk(odvodCelkem);
+    elZbytek.style.color = '#c0392b';
+    elZbytek.style.fontSize = '1.1rem';
+  }
 
   // Tabulka
-  var tb = document.getElementById('tableBody');
-  tb.innerHTML = '';
-
+  var tbody = document.getElementById('np-tbody');
+  tbody.innerHTML = '';
   var rows = [
-    ['Celkový přepočtený počet zaměstnanců', formatNum(celkem, 2) + ' osob'],
-    ['Povinný podíl OZP (4 %)', formatNum(povinnyPocetRaw, 2) + ' osob'],
-    ['— z toho přímé zaměstnávání OZP', formatNum(ozpPrimo, 2) + ' osob'],
-    ['— z toho náhradní plnění (' + formatCzk(nahradni) + ' ÷ ' + formatCzk(hodnotaJedne) + ' na 1 OZP)', formatNum(ozpNahradni, 4) + ' osob'],
-    ['Celkem splněno', formatNum(splnenoCelkem, 4) + ' osob'],
-    ['Nesplněný počet OZP (podléhá odvodu)', formatNum(zbytek, 4) + ' osob'],
-    ['Odvod do státního rozpočtu (2,5 × průměrná mzda × nesplněný počet)', formatCzk(odvodCelkem)],
+    ['Celkový přepočtený počet zaměstnanců', npFmt(celkem, 2) + ' osob', false],
+    ['Přímý podíl zaměstnaných OZP', npFmt(podil, 2) + ' %', false],
+    ['Povinný podíl OZP (4 %)', npFmt(povinny, 2) + ' osob', false],
+    ['— přímé zaměstnávání OZP', npFmt(ozp, 2) + ' osob', false],
+    ['— náhradní plnění (' + npCzk(nahradni) + ' ÷ ' + npCzk(hodnotaOzp) + ' / OZP)', npFmt(ozpNahradni, 4) + ' osob', false],
+    ['Celkem splněno', npFmt(splneno, 4) + ' osob', ok ? 'green' : 'orange'],
+    ['Nesplněný počet OZP', npFmt(zbytek, 4) + ' osob', zbytek > 0 ? 'red' : 'green'],
+    ['Koeficient odvodu dle § 82', koefTxt, false],
+    ['Odvod do státního rozpočtu', npCzk(odvodCelkem), zbytek > 0 ? 'red' : 'green'],
   ];
+
+  var colors = { green: '#e9f7ef', orange: '#fef5e7', red: '#fdf0ed' };
+  var textColors = { green: '#1e8449', orange: '#ca6f1e', red: '#c0392b' };
 
   for (var i = 0; i < rows.length; i++) {
     var tr = document.createElement('tr');
-    tr.innerHTML = '<td>' + rows[i][0] + '</td><td>' + rows[i][1] + '</td>';
-    tb.appendChild(tr);
+    var bg  = rows[i][2] ? colors[rows[i][2]]     : (i % 2 === 0 ? '#fff' : '#fafafa');
+    var tc  = rows[i][2] ? textColors[rows[i][2]] : '#1a1a1a';
+    tr.innerHTML =
+      '<td style="padding:0.5rem 0.8rem;border-bottom:1px solid #eee;color:' + tc + ';background:' + bg + ';">' + rows[i][0] + '</td>' +
+      '<td style="padding:0.5rem 0.8rem;border-bottom:1px solid #eee;text-align:right;font-weight:700;color:' + tc + ';background:' + bg + ';">' + rows[i][1] + '</td>';
+    tbody.appendChild(tr);
   }
 
-  // Poznámka
-  var nb = document.getElementById('noteBox');
-  if (zbytek <= 0) {
-    nb.innerHTML = '<p><strong>✓ Povinnost je splněna.</strong> Celkové plnění (' + formatNum(splnenoCelkem, 2) + ' osob) pokrývá nebo přesahuje zákonný požadavek ' + formatNum(povinnyPocetRaw, 2) + ' OZP. Žádný odvod do státního rozpočtu nevzniká.</p>';
+  // Zpráva
+  var note = document.getElementById('np-note');
+  if (ok) {
+    note.style.background = '#e9f7ef';
+    note.style.border = '1px solid #a9dfbf';
+    note.innerHTML = '<strong style="color:#1e8449;">✓ Povinnost je splněna.</strong> Celkové plnění (' + npFmt(splneno, 2) + ' osob) pokrývá zákonný požadavek ' + npFmt(povinny, 2) + ' OZP. Žádný odvod do státního rozpočtu nevzniká.';
   } else {
-    nb.innerHTML = '<p><strong>⚠ Povinnost není plně splněna.</strong> Zbývá pokrýt ' + formatNum(zbytek, 2) + ' OZP. Možnosti:</p><ul><li>Zaměstnat dalšího pracovníka se zdravotním postižením</li><li>Navýšit odběr od dodavatele zaměstnávajícího OZP o ' + formatCzk(zbytek * hodnotaJedne) + '</li><li>Odvést ' + formatCzk(odvodCelkem) + ' do státního rozpočtu (Úřad práce ČR)</li><li>Kombinace výše uvedených způsobů</li></ul>';
+    note.style.background = '#fdf0ed';
+    note.style.border = '1px solid #f5b7b1';
+    note.innerHTML = '<strong style="color:#c0392b;">⚠ Povinnost není plně splněna.</strong> Zbývá pokrýt <strong>' + npFmt(zbytek, 2) + ' OZP</strong>, platí koeficient ' + koefTxt + '. Možnosti řešení:<ul style="margin:0.5rem 0 0 1.2rem;padding:0;">' +
+      '<li>Zaměstnat dalšího pracovníka se zdravotním postižením</li>' +
+      '<li>Navýšit odběr od dodavatele zaměstnávajícího OZP o ' + npCzk(zbytek * hodnotaOzp) + '</li>' +
+      '<li>Odvést ' + npCzk(odvodCelkem) + ' do státního rozpočtu (Úřad práce ČR)</li>' +
+      '<li>Kombinace výše uvedených způsobů</li></ul>';
   }
 
-  document.getElementById('results').classList.add('visible');
-  document.getElementById('results').scrollIntoView({ behavior: 'smooth', block: 'start' });
+  document.getElementById('np-results').style.display = 'block';
+  document.getElementById('np-results').scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 </script>
-
-</body>
-</html>
